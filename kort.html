@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+    <meta charset="UTF-8">
+    <title>Interaktivt Kort</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+
+<header><h1>Interaktivt Danmarkskort</h1></header>
+
+<nav>
+    <a href="index.html">Forside</a>
+    <a href="kort.html">Interaktivt Kort</a>
+    <a href="dyr.html">Istidens Dyr</a>
+    <a href="mennesker.html">Mennesker</a>
+    <a href="klima.html">Klima</a>
+    <a href="laering.html">Hvad lærer vi?</a>
+</nav>
+
+<div class="container">
+    <h2>Klik på områderne for at læse om istidens spor</h2>
+
+    <div class="map-area">
+        <img src="danmarkskort.png" alt="Danmarkskort" style="width:100%;">
+        
+        <div class="hotspot" style="top:40%; left:40%;" onclick="showInfo('Midtjylland')">Midtjylland</div>
+        <div class="hotspot" style="top:60%; left:60%;" onclick="showInfo('Sjælland')">Sjælland</div>
+        <div class="hotspot" style="top:55%; left:30%;" onclick="showInfo('Fyn')">Fyn</div>
+    </div>
+</div>
+
+</body>
+</html>
