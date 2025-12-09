@@ -2,41 +2,491 @@
 <html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Spor fra Istiden i Danmark</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interaktivt Danmarkskort</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(139, 92, 246, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: glow 8s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+        
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav a {
+            color: #6366f1;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        nav a:hover {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .controls {
+            text-align: center;
+            margin-bottom: 30px;
+            animation: fadeIn 1s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .controls button {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 0 8px;
+            cursor: pointer;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .controls button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 35px rgba(99, 102, 241, 0.6);
+        }
+        
+        .controls button:active {
+            transform: translateY(-1px);
+        }
+        
+        .map-container {
+            width: 100%;
+            height: 700px;
+            border-radius: 30px;
+            overflow: hidden;
+            position: relative;
+            cursor: grab;
+            background: linear-gradient(135deg, #ffffff 0%, #f3f4f6 100%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .map-container:active {
+            cursor: grabbing;
+        }
+        
+        .map-wrapper {
+            position: absolute;
+            transform-origin: 0 0;
+            transition: transform 0.1s ease-out;
+            width: 100%;
+            height: 100%;
+        }
+        
+        #mapImage {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: contain;
+        }
+        
+        .hotspot {
+            position: absolute;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(139, 92, 246, 0.95) 100%);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 15px;
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            white-space: nowrap;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .hotspot:hover {
+            background: linear-gradient(135deg, rgba(139, 92, 246, 1) 0%, rgba(168, 85, 247, 1) 100%);
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 12px 35px rgba(99, 102, 241, 0.7);
+        }
+        
+        .info-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            padding: 35px;
+            margin-top: 30px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            min-height: 150px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+        
+        .info-box h3 {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .info-box p {
+            color: #4b5563;
+            line-height: 1.8;
+            font-size: 1.1em;
+            font-weight: 400;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 8px 25px rgba(99, 102, 241, 0.5);
+            }
+            50% {
+                box-shadow: 0 8px 35px rgba(99, 102, 241, 0.8);
+            }
+        }
+        
+        .hotspot {
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        /* Responsive design */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            .controls button {
+                padding: 12px 20px;
+                font-size: 14px;
+                margin: 5px;
+            }
+            
+            .map-container {
+                height: 500px;
+            }
+            
+            nav a {
+                margin: 5px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-
 <header>
-    <h1>Spor fra Istiden i Danmark</h1>
-    <p>Hvordan istiden formede vores land og liv</p>
+    <h1>🏔️ Interaktivt Danmarkskort</h1>
+    <p>Træk og zoom for at udforske istidens spor</p>
 </header>
 
 <nav>
-    <a href="index.html">Forside</a>
-    <a href="kort.html">Interaktivt Kort</a>
-    <a href="dyr.html">Istidens Dyr</a>
-    <a href="mennesker.html">Mennesker</a>
-    <a href="klima.html">Klima</a>
-    <a href="laering.html">Hvad lærer vi?</a>
+    <a href="index.html">🏠 Forside</a>
+    <a href="kort.html">🗺️ Interaktivt Kort</a>
+    <a href="dyr.html">🦣 Istidens Dyr</a>
+    <a href="mennesker.html">👥 Mennesker</a>
+    <a href="klima.html">🌡️ Klima</a>
+    <a href="laering.html">📚 Hvad lærer vi?</a>
 </nav>
 
 <div class="container">
-    <h2>Velkommen</h2>
-    <div class="card">
-        <p>For over 20.000 år siden var Danmark dækket af en flere kilometer tyk iskappe. 
-        Gletsjerne formede bakker, dale, kystlinjer og efterlod sig store sten og sandlag. 
-        Disse spor kan vi stadig se i dag – og de fortæller historien om, hvordan fortiden har skabt nutiden.</p>
+    <h2>✨ Klik på områderne for at læse om istidens spor</h2>
+    
+    <div class="controls">
+        <button onclick="zoomIn()">🔍 Zoom Ind</button>
+        <button onclick="zoomOut()">🔍 Zoom Ud</button>
+        <button onclick="resetView()">↺ Nulstil</button>
     </div>
 
-    <h3>Se mere</h3>
-    <ul>
-        <li>🔵 Se istidens spor på <a href="kort.html">det interaktive kort</a></li>
-        <li>🐘 Læs om de dyr, der levede i istiden</li>
-        <li>🧍 Se hvordan mennesker overlevede kulden</li>
-        <li>🌡️ Sammenlign klima dengang og nu</li>
-    </ul>
+    <div class="map-container" id="mapContainer">
+        <div class="map-wrapper" id="mapWrapper">
+            <img src="Danmarkskort.png" 
+                 alt="Danmarkskort" 
+                 id="mapImage"
+                 style="display: block; pointer-events: none;">
+            
+            
+            <div class="hotspot" style="top: 40%; left: 35%;" onclick="showInfo('Midtjylland')">
+                📍 Midtjylland
+            </div>
+            <div class="hotspot" style="top: 60%; left: 60%;" onclick="showInfo('Sjælland')">
+                📍 Sjælland
+            </div>
+            <div class="hotspot" style="top: 72%; left: 46%;" onclick="showInfo('Fyn')">
+                📍 Fyn
+            </div>
+            <div class="hotspot" style="top: 13%; left: 42%;" onclick="showInfo('Vendsyssel')">
+                📍 Vendsyssel
+            </div>
+            <div class="hotspot" style="top: 80%; left: 60%;" onclick="showInfo('Møn')">
+                📍 Møn
+            </div>
+        </div>
+    </div>
+
+    <div class="info-box" id="infoBox">
+        <h3>Velkommen! 👋</h3>
+        <p>Træk kortet rundt med musen og zoom ind/ud med knapperne eller musehjulet. Klik på de lilla markører for at læse om istidens spor i forskellige dele af Danmark. Hver region har sin egen unikke historie om, hvordan gletsjerne formede landskabet.</p>
+    </div>
 </div>
 
+<script>
+    const container = document.getElementById('mapContainer');
+    const wrapper = document.getElementById('mapWrapper');
+    const infoBox = document.getElementById('infoBox');
+    
+    let scale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isDragging = false;
+    let startX, startY;
+    
+    const regionInfo = {
+        'Midtjylland': {
+            title: 'Midtjylland 🏔️',
+            text: 'Her finder vi mange moræner og bakker skabt af gletsjerne. Store sten (kampesten) blev skubbet hertil af isen. Områder som Himmelbjerget er berømte eksempler på istidens landskabsformning. Landskabet er præget af de dramatiske bakkeformationer, der vidner om gletsjernes enorme kraft.'
+        },
+        'Sjælland': {
+            title: 'Sjælland 🌊',
+            text: 'Sjælland blev formet af gletsjere, der skabte det bakkede terræn. Moræner og smeltevandssand præger landskabet. Isefjorden er et eksempel på en fjord skabt af gletsjersmeltning. De frugtbare jorde er et direkte resultat af gletsjernes transport af næringsstoffer.'
+        },
+        'Fyn': {
+            title: 'Fyn 🌾',
+            text: 'Fyn har mange morænebanker og en varieret overflade skabt af istiden. Gletsjerne efterlod sig frugtbar jord, som gjorde øen til "Danmarks Havekælder". Det bølgende landskab er perfekt til landbrug og giver øen dens karakteristiske skønhed.'
+        },
+        'Vendsyssel': {
+            title: 'Vendsyssel 🏖️',
+            text: 'Vendsyssel var tæt på iskanten og har fladt terræn med meget sand og grus. Skagen dannedes af strømme og sedimenter fra smeltevandsfloder efter istiden. De lange sandstrande er et unikt resultat af istidsprocesser kombineret med havets kræfter.'
+        },
+        'Møn': {
+            title: 'Møn ⛰️',
+            text: 'Møns Klint er Danmarks mest berømte istidsspor! De hvide kridtklipper blev skubbet op af gletsjerne. Her kan man se 70 millioner år gamle lag presset op i lodret position. Dette geologiske vidunder tiltrækker besøgende fra hele verden og viser gletsjernes utrolige styrke.'
+        }
+    };
+    
+    function updateTransform() {
+        wrapper.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+    
+    function zoomIn() {
+        scale = Math.min(scale * 1.3, 5);
+        updateTransform();
+    }
+    
+    function zoomOut() {
+        scale = Math.max(scale / 1.3, 0.5);
+        updateTransform();
+    }
+    
+    function resetView() {
+        scale = 1;
+        translateX = 0;
+        translateY = 0;
+        updateTransform();
+    }
+    
+    // Mouse drag
+    container.addEventListener('mousedown', (e) => {
+        if (e.target.classList.contains('hotspot')) return;
+        isDragging = true;
+        startX = e.clientX - translateX;
+        startY = e.clientY - translateY;
+    });
+    
+    container.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        translateX = e.clientX - startX;
+        translateY = e.clientY - startY;
+        updateTransform();
+    });
+    
+    container.addEventListener('mouseup', () => {
+        isDragging = false;
+    });
+    
+    container.addEventListener('mouseleave', () => {
+        isDragging = false;
+    });
+    
+    // Mouse wheel zoom
+    container.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        if (e.deltaY < 0) {
+            zoomIn();
+        } else {
+            zoomOut();
+        }
+    });
+    
+    // Touch support
+    let lastDistance = 0;
+    
+    container.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 2) {
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            lastDistance = Math.sqrt(dx * dx + dy * dy);
+        } else if (e.touches.length === 1) {
+            isDragging = true;
+            startX = e.touches[0].clientX - translateX;
+            startY = e.touches[0].clientY - translateY;
+        }
+    });
+    
+    container.addEventListener('touchmove', (e) => {
+        if (e.touches.length === 2) {
+            e.preventDefault();
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (lastDistance > 0) {
+                const delta = distance - lastDistance;
+                if (delta > 0) {
+                    zoomIn();
+                } else if (delta < 0) {
+                    zoomOut();
+                }
+            }
+            lastDistance = distance;
+        } else if (e.touches.length === 1 && isDragging) {
+            translateX = e.touches[0].clientX - startX;
+            translateY = e.touches[0].clientY - startY;
+            updateTransform();
+        }
+    });
+    
+    container.addEventListener('touchend', () => {
+        isDragging = false;
+        lastDistance = 0;
+    });
+    
+    function showInfo(region) {
+        const info = regionInfo[region];
+        infoBox.style.animation = 'none';
+        setTimeout(() => {
+            infoBox.innerHTML = `
+                <h3>${info.title}</h3>
+                <p>${info.text}</p>
+            `;
+            infoBox.style.animation = 'fadeInUp 0.6s ease';
+        }, 50);
+    }
+</script>
 </body>
 </html>
