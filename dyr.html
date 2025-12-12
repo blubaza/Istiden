@@ -2,29 +2,639 @@
 <html lang="da">
 <head>
     <meta charset="UTF-8">
-    <title>Istidens dyr</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Istidens Dyr</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-attachment: fixed;
+            color: #2d3748;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.95) 0%, rgba(139, 92, 246, 0.95) 100%);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            animation: glow 8s ease-in-out infinite;
+        }
+        
+        @keyframes glow {
+            0%, 100% { transform: translate(0, 0); }
+            50% { transform: translate(30px, 30px); }
+        }
+        
+        header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3em;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        header p {
+            font-size: 1.2em;
+            font-weight: 300;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+        
+        nav {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav a {
+            color: #6366f1;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        nav a:hover {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+        
+        h2 {
+            font-family: 'Playfair Display', serif;
+            color: white;
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 20px rgba(0, 0, 0, 0.3);
+            animation: fadeInDown 0.8s ease;
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .animal-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 250, 251, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            animation: fadeInUp 0.8s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .animal-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 80px rgba(99, 102, 241, 0.4);
+        }
+        
+        .animal-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        
+        .animal-card:hover .animal-image {
+            transform: scale(1.1);
+        }
+        
+        .animal-content {
+            padding: 30px;
+        }
+        
+        .animal-content h3 {
+            font-family: 'Playfair Display', serif;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+        
+        .animal-content p {
+            color: #4b5563;
+            line-height: 1.8;
+            font-size: 1em;
+            margin-bottom: 15px;
+        }
+        
+        .animal-facts {
+            background: rgba(99, 102, 241, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        
+        .animal-facts strong {
+            color: #6366f1;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .animal-facts ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .animal-facts li {
+            padding: 5px 0;
+            color: #4b5563;
+        }
+        
+        .animal-facts li:before {
+            content: "🔹 ";
+            margin-right: 8px;
+        }
+        
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(249, 250, 251, 0.98) 100%);
+            margin: 5% auto;
+            padding: 40px;
+            border-radius: 30px;
+            max-width: 800px;
+            box-shadow: 0 30px 90px rgba(0, 0, 0, 0.5);
+            animation: slideIn 0.4s ease;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .close {
+            color: #6366f1;
+            float: right;
+            font-size: 35px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .close:hover {
+            color: #8b5cf6;
+            transform: scale(1.2);
+        }
+        
+        .modal-image {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 20px;
+        }
+        
+        /* Slideshow styles */
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slide {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 450px;
+            animation: fadeSlide 0.5s ease;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        @keyframes fadeSlide {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .slide-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(139, 92, 246, 0.9) 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slide-nav:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        }
+        
+        .slide-nav.prev {
+            left: 15px;
+        }
+        
+        .slide-nav.next {
+            right: 15px;
+        }
+        
+        .slide-dots {
+            text-align: center;
+            padding: 15px 0;
+        }
+        
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            width: 30px;
+            border-radius: 6px;
+        }
+        
+        .dot:hover {
+            background: rgba(99, 102, 241, 0.6);
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            h2 {
+                font-size: 1.8em;
+            }
+            
+            .animals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            nav a {
+                margin: 5px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 <body>
-
-<header><h1>Istidens dyr</h1></header>
+<header>
+    <h1>🦣 Istidens Dyr</h1>
+    <p>Mød de fantastiske dyr der levede i istiden</p>
+</header>
 
 <nav>
-    <a href="index.html">Forside</a>
-    <a href="kort.html">Interaktivt Kort</a>
-    <a href="dyr.html">Istidens Dyr</a>
-    <a href="mennesker.html">Mennesker</a>
-    <a href="klima.html">Klima</a>
-    <a href="laering.html">Hvad lærer vi?</a>
+    <a href="index.html">🏠 Danmarkskort</a>
+    <a href="dyr.html">🦣 Istidens Dyr</a>
 </nav>
 
 <div class="container">
-    <div class="card"><h2>Mammut</h2><p>Mammutter var store elefanter med langt pelslag. De var tilpasset ekstrem kulde.</p></div>
-
-    <div class="card"><h2>Uldhåret næsehorn</h2><p>Et stort planteædende dyr med tyk pels, der levede i Europa under istiden.</p></div>
-
-    <div class="card"><h2>Rensdyr</h2><p>Rensdyr var almindelige i Danmark i istiden – de fulgte isens kanter.</p></div>
+    <h2>✨ Dyr fra Istiden i Danmark</h2>
+    
+    <div class="animals-grid" id="animalsGrid"></div>
 </div>
 
+<!-- Modal -->
+<div id="animalModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+    const animals = [
+        {
+            name: 'Mammut 🦣',
+            images: [
+                { url: 'mammut.jpg', caption: 'Mammut' },
+                { url: 'mammut2.jpg', caption: 'Mammut I forhold til menneske' }
+            ],
+            shortDesc: 'Mammutter var store elefanter med langt pelslag. De var tilpasset ekstrem kulde og levede på tundraen.',
+            fullDesc: 'Mammutter var ikoniske istidsdyr der levede i Danmark for omkring 20.000 år siden. De kunne blive op til 4 meter høje og veje 6 tons. Deres lange, buede stødtænder blev brugt til at grave i sneen efter føde.',
+            facts: [
+                'Højde: Op til 4 meter',
+                'Vægt: 4-6 tons',
+                'Pels: Tyk, ulden pels med lange hår',
+                'Føde: Græs, urter, buske',
+                'Levested: Kolde tundraområder'
+            ]
+        },
+        {
+            name: 'Uldhåret Næsehorn 🦏',
+            images: [
+                { url: 'nasehorn2.jpg', caption: 'Uldhåret Næsehorn' },
+                { url: 'nasehorn1.jpg', caption: 'Uldhåret Næsehorn i forhold til menneske' }
+            ],
+            shortDesc: 'Et stort planteædende dyr med tyk pels, der levede i Europa under istiden.',
+            fullDesc: 'Det uldhårede næsehorn var perfekt tilpasset istidens kolde klima. Med sin tykke pels og kraftige krop kunne det overleve i de barske forhold. De havde to horn - et stort på næsen og et mindre på panden.',
+            facts: [
+                'Højde: 1.5-2 meter ved skulderen',
+                'Vægt: 1.5-3 tons',
+                'Horn: To horn, det forreste op til 1 meter',
+                'Pels: Tyk, ulden underpels',
+                'Føde: Græsser og lave planter'
+            ]
+        },
+        {
+            name: 'Kæmpehjort 🦌',
+            images: [
+                { url: 'rensdyr1.jpg', caption: 'Kæmpehjort' },
+                { url: 'rensdyr2.jpg', caption: 'Kæmpehjort i forhold til menneske' }
+            ],
+            shortDesc: 'Kæmpehjorten var et af de mest imponerende dyr fra Weichsel-istiden og levede også i Danmark',
+            fullDesc: 'især kendt for sine enorme gevirer, som kunne blive bredere end en voksen mand er høj. Selvom den kaldes “kæmpehjort”, var selve kroppen ikke meget større end en elgs, men gevirerne gjorde den helt unik. Den levede i åbne landskaber, hvor der var god plads til at bære de enorme gevirer.',
+            facts: [
+                'Højde: 1.8-2.1 meter ved skulderen',
+                'Vægt: 500-700 kg',
+                'Gevier: Op til 3.5 meter i spænd og op mod 40kg',
+                'Føde: Græs, blade og urter',
+                'Særligt: Åbne stepper og let skov i Europa og Asien'
+            ]
+        },
+        {
+            name: 'Hulbjørn 🐻',
+            images: [
+                { url: 'hulebjoern1.jpg', caption: 'Hulebjørn' },
+                { url: 'hulebjoern2.jpg', caption: 'Hulebjørn i forhold til menneske' }
+            ],
+            shortDesc: 'En kæmpe bjørn der var større end moderne bjørne. De levede i huler og ernærede sig hovedsageligt af planter.',
+            fullDesc: 'Hulbjørnen var en af de største bjørne der nogensinde har levet. På trods af deres størrelse var de primært planteædere. De fik deres navn fordi deres knogler ofte blev fundet i huler, hvor de gik i hi om vinteren.',
+            facts: [
+                'Højde: Op til 3.5 meter på bagben',
+                'Vægt: 400-600 kg',
+                'Føde: Primært planter, bær, rødder',
+                'Levested: Bjerge og skovområder',
+                'Særligt: Overvintrerede i huler'
+            ]
+        },
+        {
+            name: 'Steppebison 🐃',
+            images: [
+                { url: 'steppebison1.jpg', caption: 'Steppebison' },
+                { url: 'steppebison2.jpg', caption: 'Steppebison i forhold til menneske' }
+            ],
+            shortDesc: 'Store kraftige dyr der levede i flokke på tundraen. De var en vigtig fødekilde for istidsmennesker.',
+            fullDesc: 'Steppebisonen var større end moderne bison og havde længere horn. De levede i store flokke på de åbne græssletter. Mennesker jagtede dem ved at drive dem ud over klipper eller ind i fælder.',
+            facts: [
+                'Højde: 2-2.5 meter',
+                'Vægt: 800-1000 kg',
+                'Horn: Store, buede horn',
+                'Føde: Græs og urter',
+                'Særligt: Levede i store flokke'
+            ]
+        },
+        {
+            name: 'Huleløve 🐯',
+            images: [
+                { url: 'loeve.jpg', caption: 'Huleløve' },
+                { url: 'loeve2.jpg', caption: 'Huleløve i forhold til menneske' }
+            ],
+            shortDesc: 'En frygtindgydende rovkat med enorme hjørnetænder. De jagtede store planteædere.',
+            fullDesc: 'Huleløven var et af istidens mest frygtede rovdyr. Deres karakteristiske lange hjørnetænder kunne blive op til 28 cm lange og blev brugt til at give et dødeligt bid i halsen på deres bytte.',
+            facts: [
+                'Længde: Op til 2.5 meter',
+                'Vægt: 200-400 kg',
+                'Tænder: Sabeltænder op til 28 cm',
+                'Føde: Store planteædere',
+                'Særligt: Jagtede i grupper'
+            ]
+        }
+    ];
+    
+    const modal = document.getElementById('animalModal');
+    const closeBtn = document.getElementsByClassName('close')[0];
+    const animalsGrid = document.getElementById('animalsGrid');
+    
+    let currentSlide = 0;
+    let currentAnimal = null;
+    
+    // Create animal cards
+    animals.forEach((animal, index) => {
+        const card = document.createElement('div');
+        card.className = 'animal-card';
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.innerHTML = `
+            <img src="${animal.images[0].url}" alt="${animal.name}" class="animal-image" onerror="this.src='https://via.placeholder.com/400x300/6366f1/ffffff?text=${encodeURIComponent(animal.name)}'">
+            <div class="animal-content">
+                <h3>${animal.name}</h3>
+                <p>${animal.shortDesc}</p>
+                <div class="animal-facts">
+                    <strong>Klik for at læse mere →</strong>
+                </div>
+            </div>
+        `;
+        card.onclick = () => openModal(animal);
+        animalsGrid.appendChild(card);
+    });
+    
+    function openModal(animal) {
+        currentAnimal = animal;
+        currentSlide = 0;
+        
+        const modalBody = document.getElementById('modalBody');
+        let factsHTML = '<ul>';
+        animal.facts.forEach(fact => {
+            factsHTML += `<li>${fact}</li>`;
+        });
+        factsHTML += '</ul>';
+        
+        let slideshowHTML = '<div class="slideshow-container" id="animalSlideshow">';
+        animal.images.forEach((img, index) => {
+            slideshowHTML += `
+                <div class="slide ${index === 0 ? 'active' : ''}">
+                    <img src="${img.url}" alt="${animal.name}" onerror="this.src='https://via.placeholder.com/800x450/6366f1/ffffff?text=${encodeURIComponent(animal.name)}'">
+                    <div class="slide-caption">${img.caption}</div>
+                </div>
+            `;
+        });
+        slideshowHTML += `
+            <button class="slide-nav prev" onclick="changeAnimalSlide(-1)">❮</button>
+            <button class="slide-nav next" onclick="changeAnimalSlide(1)">❯</button>
+        </div>`;
+        
+        let dotsHTML = '<div class="slide-dots">';
+        animal.images.forEach((img, index) => {
+            dotsHTML += `<span class="dot ${index === 0 ? 'active' : ''}" onclick="goToAnimalSlide(${index})"></span>`;
+        });
+        dotsHTML += '</div>';
+        
+        modalBody.innerHTML = `
+            <h3 style="font-family: 'Playfair Display', serif; background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 2.5em; margin-bottom: 20px;">${animal.name}</h3>
+            ${slideshowHTML}
+            ${dotsHTML}
+            <p style="color: #4b5563; line-height: 1.8; font-size: 1.1em; margin: 20px 0;">${animal.fullDesc}</p>
+            <div class="animal-facts">
+                <strong style="font-size: 1.3em; margin-bottom: 15px;">📋 Fakta:</strong>
+                ${factsHTML}
+            </div>
+        `;
+        modal.style.display = 'block';
+    }
+    
+    function changeAnimalSlide(direction) {
+        const slides = document.querySelectorAll('#animalSlideshow .slide');
+        const dots = document.querySelectorAll('.slide-dots .dot');
+        
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        
+        currentSlide = (currentSlide + direction + currentAnimal.images.length) % currentAnimal.images.length;
+        
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+    
+    function goToAnimalSlide(index) {
+        const slides = document.querySelectorAll('#animalSlideshow .slide');
+        const dots = document.querySelectorAll('.slide-dots .dot');
+        
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        
+        currentSlide = index;
+        
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+    
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+    
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+</script>
 </body>
 </html>
