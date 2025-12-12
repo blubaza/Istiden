@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- Updated: 2025-12-12 - Force GitHub Pages redeploy -->
 <html lang="da">
 <head>
     <meta charset="UTF-8">
@@ -247,6 +248,111 @@
             line-height: 1.8;
             font-size: 1.1em;
             font-weight: 400;
+            margin-bottom: 25px;
+        }
+        
+        .slideshow-container {
+            position: relative;
+            max-width: 100%;
+            margin: 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slide {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 750px;
+            animation: fadeSlide 0.5s ease;
+        }
+        
+        .slide.active {
+            display: block;
+        }
+        
+        @keyframes fadeSlide {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .slide-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            color: white;
+            padding: 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+        
+        .slide-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.9) 0%, rgba(139, 92, 246, 0.9) 100%);
+            color: white;
+            border: none;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 24px;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .slide-nav:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 8px 25px rgba(99, 102, 241, 0.6);
+        }
+        
+        .slide-nav.prev {
+            left: 15px;
+        }
+        
+        .slide-nav.next {
+            right: 15px;
+        }
+        
+        .slide-dots {
+            text-align: center;
+            padding: 15px 0;
+        }
+        
+        .dot {
+            height: 12px;
+            width: 12px;
+            margin: 0 5px;
+            background: rgba(99, 102, 241, 0.3);
+            border-radius: 50%;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .dot.active {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            width: 30px;
+            border-radius: 6px;
+        }
+        
+        .dot:hover {
+            background: rgba(99, 102, 241, 0.6);
         }
         
         @keyframes pulse {
@@ -296,12 +402,9 @@
 </header>
 
 <nav>
-    <a href="index.html">🏠 Forside</a>
-    <a href="kort.html">🗺️ Interaktivt Kort</a>
+    <a href="index.html">🏠 Danmarkskort</a>
     <a href="dyr.html">🦣 Istidens Dyr</a>
-    <a href="mennesker.html">👥 Mennesker</a>
-    <a href="klima.html">🌡️ Klima</a>
-    <a href="laering.html">📚 Hvad lærer vi?</a>
+    </a>
 </nav>
 
 <div class="container">
@@ -324,16 +427,16 @@
             <div class="hotspot" style="top: 40%; left: 35%;" onclick="showInfo('Midtjylland')">
                 📍 Midtjylland
             </div>
-            <div class="hotspot" style="top: 60%; left: 60%;" onclick="showInfo('Sjælland')">
+            <div class="hotspot" style="top: 60%; left: 58%;" onclick="showInfo('Sjælland')">
                 📍 Sjælland
             </div>
-            <div class="hotspot" style="top: 72%; left: 46%;" onclick="showInfo('Fyn')">
+            <div class="hotspot" style="top: 73%; left: 46%;" onclick="showInfo('Fyn')">
                 📍 Fyn
             </div>
-            <div class="hotspot" style="top: 13%; left: 42%;" onclick="showInfo('Vendsyssel')">
+            <div class="hotspot" style="top: 17%; left: 38%;" onclick="showInfo('Vendsyssel')">
                 📍 Vendsyssel
             </div>
-            <div class="hotspot" style="top: 80%; left: 60%;" onclick="showInfo('Møn')">
+            <div class="hotspot" style="top: 83%; left: 58%;" onclick="showInfo('Møn')">
                 📍 Møn
             </div>
         </div>
@@ -359,23 +462,47 @@
     const regionInfo = {
         'Midtjylland': {
             title: 'Midtjylland 🏔️',
-            text: 'Her finder vi mange moræner og bakker skabt af gletsjerne. Store sten (kampesten) blev skubbet hertil af isen. Områder som Himmelbjerget er berømte eksempler på istidens landskabsformning. Landskabet er præget af de dramatiske bakkeformationer, der vidner om gletsjernes enorme kraft.'
+            text: 'Store dele af Midtjylland var rent faktisk ikke dækket med is men lå foran isen. Så når isen begyndte at smelte, flød vandet ned over de udækket område og dannede flodsystemer. underistiden løb enorme mængder smeltevand væk fra iskanten i Østjylland og ud over det midtjyske område. Det skyller de små jordpartikler væk (ler og silt) og efterlader kun sand og grus. Derfor står Midtjylland tilbage med tykke lag af sand og grus, som planter har svært ved at gro i uden hjælp. ',
+            images: [
+                { url: 'Nyt Projekt (45).png', caption: 'Under istiden: Dele af Midjylland var ikke dækket med is' },
+                { url: 'Nyt Projekt (46).png', caption: 'I Dag: Gudenåen' },
+                { url: 'Nyt Projekt (48).png', caption: 'Under istiden: Smeltevand' },
+                { url: 'Nyt Projekt (47).png', caption: 'I Dag: Heden' }
+            ]
         },
         'Sjælland': {
             title: 'Sjælland 🌊',
-            text: 'Sjælland blev formet af gletsjere, der skabte det bakkede terræn. Moræner og smeltevandssand præger landskabet. Isefjorden er et eksempel på en fjord skabt af gletsjersmeltning. De frugtbare jorde er et direkte resultat af gletsjernes transport af næringsstoffer.'
+            text: 'Der kom is ind over Sjælland flere gange. Nogle steder smeltede isen ujævnt = søer og små bakker fra dødis. Nordsjælland har mange søer og bakker pga. dødis.',
+            images: [
+                { url: 'Nyt Projekt (54).png', caption: 'Under Istiden: Dødis' },
+                { url: 'Nyt Projekt (55).png', caption: 'I Dag: Søer og bakker' },
+                { url: 'Nyt Projekt (57).png', caption: 'I Dag: Tydlig landskab på Dødis' }
+                
+            ]
         },
         'Fyn': {
             title: 'Fyn 🌾',
-            text: 'Fyn har mange morænebanker og en varieret overflade skabt af istiden. Gletsjerne efterlod sig frugtbar jord, som gjorde øen til "Danmarks Havekælder". Det bølgende landskab er perfekt til landbrug og giver øen dens karakteristiske skønhed.'
+            text: 'Underistiden var Fyn også man gange dækket af is, isen skubbede bløde bakker op overalt = morænebakker. Der var også store smeltevandstunneller under isen = tunneldale. Fyn har bløde, rullende bakker, fx Svanninge Bakker. Jorden er virkelig frugtbar, fordi isen efterlod en god blanding af ler, sand og sten.',
+            images: [
+                { url: 'Nyt Projekt (52).png', caption: 'Under Istiden: Smeltevandstunneler' },
+                { url: 'Nyt Projekt (53).png', caption: 'I Dag: Svanninge Bakker' }
+            ]
         },
         'Vendsyssel': {
             title: 'Vendsyssel 🏖️',
-            text: 'Vendsyssel var tæt på iskanten og har fladt terræn med meget sand og grus. Skagen dannedes af strømme og sedimenter fra smeltevandsfloder efter istiden. De lange sandstrande er et unikt resultat af istidsprocesser kombineret med havets kræfter.'
+            text: 'Underistiden var Vendsyssel gentagne gange dækket af is. Isen skubbede sig ned over Vendsyssel. Når den skubbede sig ned over Vendsyssel skabte den randmoræner af sand jord og sten. Vendsyssel er et af Danmarks mest bakkede områder.',
+            images: [
+                { url: 'Nyt Projekt (49).png', caption: 'Under istiden: Gletsjere der laver randmoræner ' },
+                { url: 'Nyt Projekt (50).png', caption: 'I dag: Jyske Ås' },
+                { url: 'Nyt Projekt (51).png', caption: 'I dag: Lønstrup klint' }
+            ]
         },
         'Møn': {
             title: 'Møn ⛰️',
-            text: 'Møns Klint er Danmarks mest berømte istidsspor! De hvide kridtklipper blev skubbet op af gletsjerne. Her kan man se 70 millioner år gamle lag presset op i lodret position. Dette geologiske vidunder tiltrækker besøgende fra hele verden og viser gletsjernes utrolige styrke.'
+            text: 'Møns Klint er et tydeligt resultat af isens enorme tryk. De høje bakker på øen viser klart, hvor isen stoppede. Hele Møn er én stor randmoræne.',
+            images: [
+                { url: 'Nyt Projekt (56).png', caption: 'I dag: Møns Klint' }
+            ]
         }
     };
     
@@ -476,16 +603,74 @@
         lastDistance = 0;
     });
     
+    let currentSlide = 0;
+    let currentRegion = '';
+    
     function showInfo(region) {
         const info = regionInfo[region];
+        currentRegion = region;
+        currentSlide = 0;
+        
         infoBox.style.animation = 'none';
         setTimeout(() => {
+            let slideshowHTML = '<div class="slideshow-container" id="slideshow">';
+            
+            info.images.forEach((img, index) => {
+                slideshowHTML += `
+                    <div class="slide ${index === 0 ? 'active' : ''}">
+                        <img src="${img.url}" alt="${img.caption}">
+                        <div class="slide-caption">${img.caption}</div>
+                    </div>
+                `;
+            });
+            
+            slideshowHTML += `
+                <button class="slide-nav prev" onclick="changeSlide(-1)">❮</button>
+                <button class="slide-nav next" onclick="changeSlide(1)">❯</button>
+            </div>`;
+            
+            let dotsHTML = '<div class="slide-dots">';
+            info.images.forEach((img, index) => {
+                dotsHTML += `<span class="dot ${index === 0 ? 'active' : ''}" onclick="goToSlide(${index})"></span>`;
+            });
+            dotsHTML += '</div>';
+            
             infoBox.innerHTML = `
                 <h3>${info.title}</h3>
                 <p>${info.text}</p>
+                <h4 style="color: #6366f1; font-size: 1.3em; margin: 20px 0 10px 0; font-family: 'Playfair Display', serif;">📷 Billedgalleri</h4>
+                ${slideshowHTML}
+                ${dotsHTML}
             `;
             infoBox.style.animation = 'fadeInUp 0.6s ease';
         }, 50);
+    }
+    
+    function changeSlide(direction) {
+        const info = regionInfo[currentRegion];
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        
+        currentSlide = (currentSlide + direction + info.images.length) % info.images.length;
+        
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
+    }
+    
+    function goToSlide(index) {
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        
+        slides[currentSlide].classList.remove('active');
+        dots[currentSlide].classList.remove('active');
+        
+        currentSlide = index;
+        
+        slides[currentSlide].classList.add('active');
+        dots[currentSlide].classList.add('active');
     }
 </script>
 </body>
